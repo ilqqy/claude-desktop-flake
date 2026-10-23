@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" width="960" height="340" role="img" aria-label="Claude Desktop for NixOS — nix run github:ilqqy/claude-desktop-flake">
+<title>Claude Desktop for NixOS</title>
+<defs>
+  <style>
+.mono{font-family:ui-monospace,SFMono-Regular,'JetBrains Mono',Menlo,Consolas,'Liberation Mono',monospace;font-size:14px}
+.sans{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif}
+.cover{transform-box:fill-box;transform-origin:100% 50%}
+.blink{animation:blink 1.05s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+#lines{animation:fade 12.0s infinite}
+@keyframes fade{0%,91.67%{opacity:1}95.83%,97.50%{opacity:0}100%{opacity:1}}
+#c1{animation:c1 12.0s infinite}
+@keyframes c1{0%,5.00%{transform:scaleX(1);animation-timing-function:steps(43,end)}25.00%,96.67%{transform:scaleX(0);animation-timing-function:step-end}97.08%,100%{transform:scaleX(1)}}
+#c5{animation:c5 12.0s infinite}
+@keyframes c5{0%,45.00%{transform:scaleX(1);animation-timing-function:steps(39,end)}60.00%,96.67%{transform:scaleX(0);animation-timing-function:step-end}97.08%,100%{transform:scaleX(1)}}
+#k1{animation:k1 12.0s infinite}
+@keyframes k1{0%,5.00%{opacity:1;transform:translateX(0);animation-timing-function:steps(43,end)}25.00%{opacity:1;transform:translateX(361.2px);animation-timing-function:step-end}27.50%,100%{opacity:0;transform:translateX(361.2px)}}
+#k5{animation:k5 12.0s infinite}
+@keyframes k5{0%,45.00%{opacity:0;transform:translateX(0);animation-timing-function:step-end}45.08%{opacity:1;transform:translateX(0);animation-timing-function:steps(39,end)}60.00%,91.67%{opacity:1;transform:translateX(327.6px)}95.83%,100%{opacity:0;transform:translateX(327.6px)}}
+#l2{animation:l2 12.0s infinite}@keyframes l2{0%,29.17%{opacity:0;transform:translateX(-6px)}32.08%,96.67%{opacity:1;transform:none}97.08%,100%{opacity:0}}
+#l3{animation:l3 12.0s infinite}@keyframes l3{0%,34.17%{opacity:0;transform:translateX(-6px)}37.08%,96.67%{opacity:1;transform:none}97.08%,100%{opacity:0}}
+#l4{animation:l4 12.0s infinite}@keyframes l4{0%,39.17%{opacity:0;transform:translateX(-6px)}42.08%,96.67%{opacity:1;transform:none}97.08%,100%{opacity:0}}
+
+.orb{animation:drift 14s ease-in-out infinite alternate}
+.orb2{animation-duration:18s;animation-delay:-6s}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(40px,-25px)}}
+.spark{transform-box:fill-box;transform-origin:50% 50%;animation:spark 3.2s ease-in-out infinite}
+.spark2{animation-delay:-1.6s}
+@keyframes spark{0%,100%{transform:scale(.55) rotate(0deg);opacity:.35}50%{transform:scale(1) rotate(45deg);opacity:1}}
+.intro{animation:intro .9s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}
+@keyframes intro{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important}
+  .cover,.cursor{display:none}
+}
+</style>
+  <linearGradient id="border" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="960" y2="340">
+    <stop offset="0" stop-color="#D97757"/><stop offset=".5" stop-color="#7EBAE4"/><stop offset="1" stop-color="#5277C3"/>
+    <animateTransform attributeName="gradientTransform" type="rotate" from="0 480 170" to="360 480 170" dur="8s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="accent" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="420" y2="0">
+    <stop offset="0" stop-color="#D97757"/><stop offset=".55" stop-color="#E9A27C"/><stop offset="1" stop-color="#7EBAE4"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="-120 0;120 0;-120 0" dur="7s" repeatCount="indefinite"/>
+  </linearGradient>
+  <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#ffffff" opacity=".06"/></pattern>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="45"/></filter>
+  <clipPath id="card"><rect x="6" y="6" width="948" height="328" rx="22"/></clipPath>
+</defs>
+
+<rect x="6" y="6" width="948" height="328" rx="22" fill="#0b0f17"/>
+<g clip-path="url(#card)">
+  <rect width="960" height="340" fill="url(#dots)"/>
+  <circle class="orb" cx="110" cy="330" r="130" fill="#D97757" opacity=".28" filter="url(#blur)"/>
+  <circle class="orb orb2" cx="880" cy="20" r="150" fill="#5277C3" opacity=".30" filter="url(#blur)"/>
+</g>
+<rect x="6" y="6" width="948" height="328" rx="22" fill="none" stroke="url(#border)" stroke-width="2"/>
+
+<g class="sans">
+  <g class="intro d1">
+    <rect x="48" y="62" width="176" height="26" rx="13" fill="#D97757" fill-opacity=".12" stroke="#D97757" stroke-opacity=".45"/>
+    <text x="136" y="80" text-anchor="middle" font-size="12" font-weight="600" letter-spacing="1.6" fill="#E9A27C">UNOFFICIAL NIX FLAKE</text>
+  </g>
+  <text class="intro d2" x="46" y="146" font-size="46" font-weight="700" fill="#f0f6fc">Claude Desktop</text>
+  <text class="intro d3" x="46" y="200" font-size="46" font-weight="700" fill="url(#accent)">for NixOS</text>
+  <g class="intro d4" font-size="15" fill="#8b949e">
+    <text x="48" y="244">Anthropic's official Linux build,</text>
+    <text x="48" y="266">repacked as a flake · x86_64 · aarch64</text>
+  </g>
+</g>
+<path class="spark " d="M292,170 Q294.16,179.84 304,182 Q294.16,184.16 292,194 Q289.84,184.16 280,182 Q289.84,179.84 292,170Z" fill="url(#accent)"/>
+<path class="spark spark2" d="M316,159 Q317.08,163.92 322,165 Q317.08,166.08 316,171 Q314.92,166.08 310,165 Q314.92,163.92 316,159Z" fill="url(#accent)"/>
+
+<g>
+  <rect x="470" y="62" width="452" height="232" rx="14" fill="#0f1522" stroke="#30363d"/>
+  <path d="M470 76a14 14 0 0 1 14-14h424a14 14 0 0 1 14 14v18h-452z" fill="#161b26"/>
+  <circle cx="492" cy="80" r="5.5" fill="#ff5f57"/><circle cx="511" cy="80" r="5.5" fill="#febc2e"/><circle cx="530" cy="80" r="5.5" fill="#28c840"/>
+  <text class="mono" x="696" y="84" text-anchor="middle" font-size="12" fill="#6e7681">~/nixos — zsh</text>
+  <g id="lines">
+    <text class="mono" x="494" y="132" textLength="361.2" lengthAdjust="spacingAndGlyphs"><tspan fill="#D97757">$ </tspan><tspan fill="#e6edf3">nix run github:ilqqy/claude-desktop-flake</tspan></text>
+    <rect id="c1" class="cover" x="493" y="116" width="363.2" height="22" fill="#0f1522"/>
+    <g id="k1" class="cursor"><rect class="blink" x="494" y="118" width="8.4" height="18" rx="1.5" fill="#D97757"/></g>
+    <text id="l2" class="mono" x="494" y="160"><tspan fill="#3fb950">✓ </tspan><tspan fill="#8b949e">fetched official .deb · sha256 pinned</tspan></text>
+    <text id="l3" class="mono" x="494" y="188"><tspan fill="#3fb950">✓ </tspan><tspan fill="#8b949e">autoPatchelf: 0 unresolved dependencies</tspan></text>
+    <text id="l4" class="mono" x="494" y="216"><tspan fill="#3fb950">✓ </tspan><tspan fill="#8b949e">FHS env: bash · node · uv · git · ssh</tspan></text>
+    <text class="mono" x="494" y="244" textLength="327.6" lengthAdjust="spacingAndGlyphs"><tspan fill="#D97757">▸ </tspan><tspan fill="#e6edf3">starting Claude: Chat · Code · Cowork</tspan></text>
+    <rect id="c5" class="cover" x="493" y="228" width="329.6" height="22" fill="#0f1522"/>
+    <g id="k5" class="cursor"><rect class="blink" x="494" y="230" width="8.4" height="18" rx="1.5" fill="#D97757"/></g>
+  </g>
+</g>
+</svg>

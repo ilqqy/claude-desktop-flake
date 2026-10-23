@@ -1,52 +1,52 @@
 <div align="center">
 
-# Claude Desktop for NixOS
-
-**Claude Desktop (Chat · Code · Cowork) в виде Nix flake для NixOS.**
-Собирается из официального Linux-пакета Anthropic.
+<img src="assets/banner.svg" width="100%" alt="Claude Desktop for NixOS — nix run github:ilqqy/claude-desktop-flake">
 
 [![NixOS](https://img.shields.io/badge/NixOS-flake-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 [![Claude Desktop](https://img.shields.io/badge/Claude_Desktop-3.6556.2-D97757)](https://code.claude.com/docs/en/desktop-linux)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-2.1.308-D97757)](https://code.claude.com/docs/en/desktop)
-[![Platforms](https://img.shields.io/badge/platforms-x86__64%20%7C%20aarch64-informational)](#статус)
-[![License](https://img.shields.io/badge/app_license-unfree-red)](#дисклеймер)
-[![Unofficial](https://img.shields.io/badge/status-unofficial-lightgrey)](#дисклеймер)
+[![Platforms](https://img.shields.io/badge/platforms-x86__64%20%7C%20aarch64-informational)](#status)
+[![License](https://img.shields.io/badge/app_license-unfree-red)](#disclaimer)
+[![Unofficial](https://img.shields.io/badge/status-unofficial-lightgrey)](#disclaimer)
+
+**Claude Desktop (Chat · Code · Cowork) as a Nix flake for NixOS,
+built from Anthropic's official Linux package.**
 
 </div>
 
 > [!WARNING]
-> **Это неофициальный репак.** Anthropic выпускает Linux-версию (beta) только для Ubuntu и Debian
-> и NixOS не поддерживает. С проблемами этого флейка в поддержку Anthropic обращаться
-> не нужно. Бинарей Anthropic в репозитории нет: `.deb` скачивается с `downloads.claude.ai`
-> при сборке, и его хэш зафиксирован.
+> **This is an unofficial repack.** Anthropic ships the Linux app (beta) for Ubuntu and Debian
+> only and does not support NixOS. Please don't take issues with this flake to Anthropic support.
+> The repository contains no Anthropic binaries: the `.deb` is fetched from
+> `downloads.claude.ai` at build time and pinned by hash.
 
 ---
 
-## Содержание
+## Contents
 
-- [Быстрый старт](#быстрый-старт)
-- [Установка](#установка)
-- [Пакеты](#пакеты)
-- [Как это устроено](#как-это-устроено)
-- [Claude Code внутри Desktop](#claude-code-внутри-desktop)
-- [MCP и конфигурация](#mcp-и-конфигурация)
+- [Quick start](#quick-start)
+- [Installation](#installation)
+- [Packages](#packages)
+- [How it works](#how-it-works)
+- [Claude Code inside Desktop](#claude-code-inside-desktop)
+- [MCP and configuration](#mcp-and-configuration)
 - [Wayland](#wayland)
-- [Обновление](#обновление)
-- [Статус](#статус)
-- [Ограничения](#ограничения)
+- [Updating](#updating)
+- [Status](#status)
+- [Limitations](#limitations)
 - [Troubleshooting](#troubleshooting)
-- [Разработка](#разработка)
-- [Дисклеймер](#дисклеймер)
+- [Development](#development)
+- [Disclaimer](#disclaimer)
 
-## Быстрый старт
+## Quick start
 
 ```sh
 nix run github:ilqqy/claude-desktop-flake
 ```
 
-Разрешать unfree отдельно не нужно: флейк сам разрешает его для этого пакета.
+No unfree configuration needed: the flake allows unfree for this package only.
 
-## Установка
+## Installation
 
 ### NixOS (flake)
 
@@ -78,15 +78,15 @@ nix run github:ilqqy/claude-desktop-flake
     inputs.claude-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
-  # Хранилище для входа в аккаунт (Secret Service). На GNOME и KDE оно уже есть.
+  # Secret Service so your sign-in persists (GNOME/KDE already provide one)
   services.gnome.gnome-keyring.enable = true;
 }
 ```
 
-Затем `sudo nixos-rebuild switch`.
+Then run `sudo nixos-rebuild switch`.
 
 <details>
-<summary><b>Через overlay (<code>pkgs.claude-desktop</code>)</b></summary>
+<summary><b>Via overlay (<code>pkgs.claude-desktop</code>)</b></summary>
 
 ```nix
 { pkgs, lib, inputs, ... }:
@@ -99,8 +99,7 @@ nix run github:ilqqy/claude-desktop-flake
 }
 ```
 
-С overlay пакет собирается из вашего nixpkgs, поэтому unfree нужно разрешить в вашей
-конфигурации, как показано выше.
+The overlay builds against your own nixpkgs, so unfree has to be allowed in your config, as shown above.
 
 </details>
 
@@ -119,25 +118,25 @@ nix run github:ilqqy/claude-desktop-flake
 </details>
 
 <details>
-<summary><b>Без конфигурации: <code>nix profile</code></b></summary>
+<summary><b>No config at all: <code>nix profile</code></b></summary>
 
 ```sh
 nix profile add github:ilqqy/claude-desktop-flake
-nix profile upgrade claude-desktop-flake   # обновить
-nix profile remove claude-desktop-flake    # удалить
+nix profile upgrade claude-desktop-flake   # update
+nix profile remove claude-desktop-flake    # uninstall
 ```
 
 </details>
 
-## Пакеты
+## Packages
 
-| Атрибут | Описание |
+| Attribute | Description |
 |---|---|
-| `default`, `claude-desktop` | приложение в FHS-окружении, **рекомендуется** |
-| `claude-desktop-cowork` | то же плюс QEMU/KVM, OVMF и virtiofsd для Cowork (≈ +1.5 ГБ) |
-| `claude-desktop-unwrapped` | без FHS: Chat работает, Code — только при `programs.nix-ld.enable = true` |
+| `default`, `claude-desktop` | the app inside an FHS environment, **recommended** |
+| `claude-desktop-cowork` | same, plus QEMU/KVM, OVMF and virtiofsd for Cowork (≈ +1.5 GB) |
+| `claude-desktop-unwrapped` | no FHS: Chat works, Code only with `programs.nix-ld.enable = true` |
 
-Для MCP-серверов в FHS можно добавить пакеты:
+You can add extra packages to the FHS env, e.g. for MCP servers:
 
 ```nix
 inputs.claude-desktop.packages.${system}.default.override {
@@ -146,56 +145,56 @@ inputs.claude-desktop.packages.${system}.default.override {
 ```
 
 <details>
-<summary><b>Что нужно для Cowork</b></summary>
+<summary><b>Cowork requirements</b></summary>
 
-- пакет `claude-desktop-cowork`;
-- включённая аппаратная виртуализация и пользователь в группе `kvm`
+- the `claude-desktop-cowork` package;
+- hardware virtualization enabled, and your user in the `kvm` group
   (`users.users.<you>.extraGroups = [ "kvm" ];`);
-- модуль ядра `vhost_vsock` (`boot.kernelModules = [ "vhost_vsock" ];`).
+- the `vhost_vsock` kernel module (`boot.kernelModules = [ "vhost_vsock" ];`).
 
 </details>
 
-## Как это устроено
+## How it works
 
 ```
-downloads.claude.ai/claude-desktop/apt/stable          (официальный apt-репозиторий, без авторизации)
-        │  fetchurl, фиксированный sha256
+downloads.claude.ai/claude-desktop/apt/stable          (official apt repo, no auth required)
+        │  fetchurl, pinned sha256
         ▼
 claude-desktop_<ver>_<arch>.deb
-        │  dpkg-deb → autoPatchelfHook          app.asar НЕ модифицируется
+        │  dpkg-deb → autoPatchelfHook          app.asar is NOT modified
         ▼
-claude-desktop-unwrapped                       родной Electron 44 + Linux-сборки claude-native / node-pty
+claude-desktop-unwrapped                       bundled Electron 44 + Linux builds of claude-native / node-pty
         │  buildFHSEnv (bubblewrap)
         ▼
 claude-desktop                                 /bin/bash, /usr/bin/*, /lib64/ld-linux, node, uv, git …
 ```
 
-**Почему именно так:**
+**Why this design:**
 
-1. **Не electron из nixpkgs.** Приложение берёт локали, хелперы и образ ВМ из
-   `process.resourcesPath`, а Electron вычисляет этот путь по `/proc/self/exe`. Поэтому
-   используется родной Electron из `.deb`, исправленный через `autoPatchelfHook`.
-2. **FHS обязателен для вкладки Code.** Desktop сам скачивает glibc-бинарь Claude Code. Кроме
-   того, он вызывает `/bin/bash`, `/usr/bin/pgrep`, `/usr/bin/secret-tool` и т. п. по
-   абсолютным путям. На NixOS без `nix-ld` ничего из этого не работает.
-3. **Заглушки не нужны.** Раньше community-проекты (k3d3, aaddrick ≤ 2.x) пересобирали
-   Windows-инсталлер и подменяли нативные модули. Теперь в официальном `.deb` они уже собраны под Linux.
+1. **Not nixpkgs' electron.** The app loads its locales, helpers and VM image from
+   `process.resourcesPath`, which Electron derives from `/proc/self/exe`. So the flake keeps the
+   Electron that ships in the `.deb` and fixes it up with `autoPatchelfHook`.
+2. **The Code tab needs FHS.** Desktop downloads a glibc build of Claude Code at runtime and
+   calls `/bin/bash`, `/usr/bin/pgrep`, `/usr/bin/secret-tool` and friends by absolute path.
+   None of that works on NixOS without `nix-ld`.
+3. **No stubs.** Older community projects (k3d3, aaddrick ≤ 2.x) repacked the Windows installer
+   and stubbed out native modules. The official `.deb` already has Linux builds of them.
 
-## Claude Code внутри Desktop
+## Claude Code inside Desktop
 
-Отдельный CLI (`@anthropic-ai/claude-code` или нативный) ставить **не нужно**, `claude` из
-`PATH` Desktop не использует.
+You **don't** need to install the CLI separately (`@anthropic-ai/claude-code` or the native build),
+and Desktop doesn't use a `claude` from your `PATH`.
 
-- в `app.asar` зашит манифест конкретной версии (для 3.6556.2 это **2.1.308**) с sha256 для каждой платформы;
-- при первом запуске вкладки Code Desktop скачивает
-  `downloads.claude.ai/claude-code-releases/<ver>/linux-x64/claude.zst`, сверяет хэш и кладёт бинарь в
-  `~/.config/Claude/claude-code/`;
-- дальше он сам обновляет эту копию (`[CCD-autoupdate]`). Загрузка идёт во время работы, а не при сборке,
-  поэтому Nix её не отслеживает.
+- `app.asar` embeds a manifest for one exact version (**2.1.308** for 3.6556.2) with a sha256 per platform;
+- the first time you use the Code tab, Desktop downloads
+  `downloads.claude.ai/claude-code-releases/<ver>/linux-x64/claude.zst`, checks the hash and installs it
+  into `~/.config/Claude/claude-code/`;
+- after that, Desktop keeps that copy updated itself (`[CCD-autoupdate]`). This happens at runtime,
+  not at build time, so Nix doesn't track it.
 
-## MCP и конфигурация
+## MCP and configuration
 
-Всё хранится в `~/.config/Claude/` (путь можно переопределить через `CLAUDE_USER_DATA_DIR`).
+Everything lives in `~/.config/Claude/` (override with `CLAUDE_USER_DATA_DIR`).
 
 ```jsonc
 // ~/.config/Claude/claude_desktop_config.json
@@ -209,92 +208,90 @@ claude-desktop                                 /bin/bash, /usr/bin/*, /lib64/ld-
 }
 ```
 
-По [документации](https://code.claude.com/docs/en/desktop) вкладка Code подхватывает эти серверы,
-а также `~/.claude.json` и `.mcp.json` проекта.
+According to the [docs](https://code.claude.com/docs/en/desktop), the Code tab picks these servers up,
+along with `~/.claude.json` and the project's `.mcp.json`.
 
-В FHS уже есть `node` / `npx`, `uv` / `uvx`, `python3`, `git`, `ssh`, `bwrap` и `socat`.
-Ваш обычный `PATH` (`/run/current-system/sw/bin`, `~/.nix-profile/bin`) тоже доступен:
-он стоит после `/usr/bin`.
+The FHS env already includes `node` / `npx`, `uv` / `uvx`, `python3`, `git`, `ssh`, `bwrap` and `socat`.
+Your regular `PATH` (`/run/current-system/sw/bin`, `~/.nix-profile/bin`) is available too, after `/usr/bin`.
 
 ## Wayland
 
-В Electron ≥ 38 по умолчанию `--ozone-platform=auto`, поэтому в Wayland-сессии приложение
-запускается нативно. Если задан `NIXOS_OZONE_WL=1`, обёртка дополнительно передаёт:
+Electron ≥ 38 defaults to `--ozone-platform=auto`, so in a Wayland session the app already runs
+natively. With `NIXOS_OZONE_WL=1` set, the wrapper also passes:
 
 ```
 --ozone-platform=wayland --enable-wayland-ime=true
 ```
 
 > [!NOTE]
-> `--ozone-platform-hint=auto` не передаётся сознательно: во встроенном Electron 44 такого флага
-> больше нет. Чтобы запустить через XWayland, используйте `claude-desktop --ozone-platform=x11`.
+> `--ozone-platform-hint=auto` is deliberately omitted: the bundled Electron 44 no longer has that flag.
+> To force XWayland, run `claude-desktop --ozone-platform=x11`.
 
-## Обновление
+## Updating
 
 ```sh
-./update.sh          # подтянуть последнюю версию в package.nix
-./update.sh --check  # exit 1, если есть обновление (удобно для CI)
+./update.sh          # bump package.nix to the latest release
+./update.sh --check  # exit 1 if an update is available (handy for CI)
 ```
 
-Цепочка доверия:
+Chain of trust:
 
 ```
-отпечаток ключа 31DD DE24 DDFA B679 F42D  7BD2 BAA9 29FF 1A7E CACE  (из документации Anthropic)
-  → GPG-подпись InRelease
-    → SHA256 индексов Packages
-      → SHA256 .deb, который должен совпасть с результатом nix-prefetch-url
+key fingerprint 31DD DE24 DDFA B679 F42D  7BD2 BAA9 29FF 1A7E CACE  (from Anthropic's docs)
+  → GPG signature of InRelease
+    → SHA256 of the Packages indexes
+      → SHA256 of the .deb, which must match nix-prefetch-url's result
 ```
 
-Скрипт переписывает только блок `# BEGIN update.sh … # END update.sh` в `package.nix`.
-У пользователей флейка обновление делается так: `nix flake update claude-desktop` и rebuild.
+The script only rewrites the `# BEGIN update.sh … # END update.sh` block in `package.nix`.
+As a user of the flake, you update with `nix flake update claude-desktop` followed by a rebuild.
 
-## Статус
+## Status
 
-Проверено на `x86_64-linux` с версией 3.6556.2.
+Tested on `x86_64-linux` with 3.6556.2.
 
-| | Что | Как проверено |
+| | What | How it was tested |
 |:-:|---|---|
-| ✅ | Сборка, `nix flake check` | `auto-patchelf: 0 dependencies could not be satisfied` |
-| ✅ | Запуск X11 | Xvfb: окно `com.anthropic.Claude`, экран «Claude for Linux» отрисован |
-| ✅ | Запуск Wayland | headless sway: нативный `xdg_shell`, флаги Ozone применяются |
-| ✅ | Ссылки `claude://` | обработчик прописывается в `mimeapps.list`; второй экземпляр передаёт URL первому |
-| ✅ | Claude Code 2.1.308 | в FHS `claude --version` работает; без FHS и без nix-ld получается `No such file or directory` |
-| ✅ | Keyring | Secret Service доступен из FHS (gnome-keyring) |
-| ⚠️ | Вход, Code-сессии, MCP | не проверялись: нужен аккаунт |
-| ⚠️ | aarch64 | вычисляется, хэш проверен, но не собиралось |
-| ⚠️ | Cowork | проверена только раскладка OVMF, запуск ВМ не проверялся |
-| ⚠️ | Quick Entry hotkey | на Wayland нужен портал GlobalShortcuts вашего DE |
-| ❌ | Автообновление приложения | на Linux его нет и в официальной сборке; обновлять через `nix flake update` |
-| ❌ | Computer Use, диктовка | нет в официальной Linux beta |
+| ✅ | Build, `nix flake check` | `auto-patchelf: 0 dependencies could not be satisfied` |
+| ✅ | X11 launch | Xvfb: `com.anthropic.Claude` window, the "Claude for Linux" screen renders |
+| ✅ | Wayland launch | headless sway: native `xdg_shell`, Ozone flags applied |
+| ✅ | `claude://` links | handler is registered in `mimeapps.list`; a second instance hands the URL to the first |
+| ✅ | Claude Code 2.1.308 | `claude --version` works in FHS; without FHS and without nix-ld it fails with `No such file or directory` |
+| ✅ | Keyring | Secret Service reachable from FHS (gnome-keyring) |
+| ⚠️ | Sign-in, Code sessions, MCP | not tested: requires an account |
+| ⚠️ | aarch64 | evaluates, hash verified, not built |
+| ⚠️ | Cowork | only the OVMF layout was checked; booting the VM was not tested |
+| ⚠️ | Quick Entry hotkey | on Wayland it needs your DE's GlobalShortcuts portal |
+| ❌ | In-app auto-update | absent in the official Linux build too; update via `nix flake update` |
+| ❌ | Computer Use, dictation | not in the official Linux beta |
 
-## Ограничения
+## Limitations
 
-Это ограничения FHS-окружения (bubblewrap):
+These come from the FHS environment (bubblewrap):
 
-- **`sudo` в Code-сессиях не работает**, потому что установлен `NoNewPrivs`;
-- **`/etc` хоста виден не целиком**: `passwd`, `hosts`, `resolv.conf`, `ssl/certs` и т. п. доступны,
-  а `/etc/ssh/ssh_config` и `/etc/gitconfig` нет. `~/.ssh` и `~/.gitconfig` работают;
-- если при входе браузер ещё не открыт, `xdg-open` запустит его **внутри** FHS. Лучше открыть
-  браузер заранее;
-- `chrome-sandbox` без SUID. Chromium использует sandbox на user namespaces, которые в NixOS
-  включены по умолчанию.
+- **`sudo` doesn't work in Code sessions**, because `NoNewPrivs` is set;
+- **only part of the host's `/etc` is visible**: `passwd`, `hosts`, `resolv.conf`, `ssl/certs` and similar
+  are there, but `/etc/ssh/ssh_config` and `/etc/gitconfig` are not. `~/.ssh` and `~/.gitconfig` work fine;
+- if your browser isn't running when you sign in, `xdg-open` will start it **inside** the FHS env,
+  so open your browser beforehand;
+- `chrome-sandbox` has no SUID bit. Chromium falls back to the user-namespace sandbox, which NixOS
+  enables by default.
 
 ## Troubleshooting
 
 <details>
-<summary><b>Вход не сохраняется, при каждом запуске просит залогиниться</b></summary>
+<summary><b>Sign-in isn't saved, it asks me to log in on every launch</b></summary>
 
-Нужен работающий Secret Service: `services.gnome.gnome-keyring.enable = true;`. На KDE — KWallet.
-При первом запуске gnome-keyring может попросить придумать пароль для нового keyring.
+You need a working Secret Service: `services.gnome.gnome-keyring.enable = true;`, or KWallet on KDE.
+On first launch gnome-keyring may ask you to set a password for a new keyring.
 
 </details>
 
 <details>
-<summary><b>После входа в браузере не открывается приложение</b></summary>
+<summary><b>The app doesn't open after signing in in the browser</b></summary>
 
-Ссылка `claude://` должна открываться через `com.anthropic.Claude.desktop`. Пакет должен быть
-установлен (через `environment.systemPackages`, Home Manager или `nix profile`), а не просто
-запущен из `./result`. Проверка:
+`claude://` links must open through `com.anthropic.Claude.desktop`. The package has to be installed
+(via `environment.systemPackages`, Home Manager or `nix profile`), not just run from `./result`. Check with:
 
 ```sh
 xdg-mime query default x-scheme-handler/claude   # → com.anthropic.Claude.desktop
@@ -303,33 +300,35 @@ xdg-mime query default x-scheme-handler/claude   # → com.anthropic.Claude.desk
 </details>
 
 <details>
-<summary><b>Где логи</b></summary>
+<summary><b>Where are the logs?</b></summary>
 
-`~/.config/Claude/logs/main.log`, а также stdout, если запускать `claude-desktop` из терминала.
+`~/.config/Claude/logs/main.log`, plus stdout if you start `claude-desktop` from a terminal.
 
 </details>
 
-## Разработка
+## Development
 
 ```sh
 nix develop      # asar, dpkg, gnupg, curl, nixfmt
 nix fmt          # nixfmt-tree
-nix flake check  # сборка и проверка форматирования
+nix flake check  # build + formatting check
 ```
 
-| Файл | Назначение |
+| File | Purpose |
 |---|---|
 | `flake.nix` | `packages`, `apps`, `overlays`, `devShells`, `formatter`, `checks` |
-| `package.nix` | распаковка `.deb`, `autoPatchelfHook`, Wayland-обёртка и FHS-окружение |
-| `update.sh` | обновление версии и хэшей по подписанному apt-индексу |
+| `package.nix` | `.deb` unpacking, `autoPatchelfHook`, Wayland wrapper, FHS env |
+| `update.sh` | bumps version and hashes from the signed apt index |
+| `assets/banner.svg` | animated header (CSS/SMIL, honours `prefers-reduced-motion`) |
 
-## Дисклеймер
+## Disclaimer
 
-Claude и Claude Desktop — продукты и товарные знаки Anthropic PBC. Этот проект с Anthropic никак
-не связан и ими не поддерживается. Само приложение проприетарное (`meta.license = lib.licenses.unfree`)
-и распространяется только с серверов Anthropic. Linux-версия находится в beta. Пользуйтесь на свой риск.
+Claude and Claude Desktop are products and trademarks of Anthropic PBC. This project is not
+affiliated with or endorsed by Anthropic. The application itself is proprietary
+(`meta.license = lib.licenses.unfree`) and is only ever downloaded from Anthropic's servers.
+The Linux app is in beta. Use at your own risk.
 
-Ссылки: [Claude Desktop on Linux](https://code.claude.com/docs/en/desktop-linux) ·
+Links: [Claude Desktop on Linux](https://code.claude.com/docs/en/desktop-linux) ·
 [Claude Code Desktop](https://code.claude.com/docs/en/desktop) ·
 [aaddrick/claude-desktop-debian](https://github.com/aaddrick/claude-desktop-debian) ·
 [k3d3/claude-desktop-linux-flake](https://github.com/k3d3/claude-desktop-linux-flake)
