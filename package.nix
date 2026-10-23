@@ -65,6 +65,7 @@
   coreutils,
   desktop-file-utils,
   git,
+  gsettings-desktop-schemas,
   nodejs,
   openssh,
   procps,
@@ -264,6 +265,10 @@ buildFHSEnv {
       coreutils
       desktop-file-utils
       git
+      # GTK aborts in file dialogs without compiled GSettings schemas;
+      # buildFHSEnv compiles /usr/share/glib-2.0/schemas from these
+      gsettings-desktop-schemas
+      gtk3
       libsecret
       nodejs
       openssh
