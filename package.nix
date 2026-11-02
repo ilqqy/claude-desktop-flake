@@ -86,15 +86,15 @@
 
 let
   # BEGIN update.sh — this block is rewritten by ./update.sh, do not edit by hand
-  version = "3.6556.2";
+  version = "4.4212.0";
   srcs = {
     x86_64-linux = {
       arch = "amd64";
-      hash = "sha256-D27R8oRcMEGbhUWoMgZ210ZKGfYl4F4CkZI4qml47LQ=";
+      hash = "sha256-T89ljg/IlTkKuCWTKHKB37ziYbDsPqkAYOgti/v9eoQ=";
     };
     aarch64-linux = {
       arch = "arm64";
-      hash = "sha256-W3CutrszWz1GhO0QataMfaRP86pH/42y/v5VvegQwQs=";
+      hash = "sha256-cCLcVt4w4L63+gp9yE4JqgDX+dTht/kwQ7Mrr3Wi9tg=";
     };
   };
   # END update.sh
